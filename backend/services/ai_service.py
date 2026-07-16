@@ -1,40 +1,47 @@
+import os
+from anthropic import Anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
+
+client = Anthropic(
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+)
 
 
 def analyze_ticket(title, details):
-    #temp response
+    prompt = f"""
+You are an AI operations assistant helping an organization triage requests.
+Analyze the following request.
 
-    if "vpn" in details.lower():
-        category = "Network"
-        ai_summary = "VPN connectivity issue detected"
-        recommended_steps =["Clear saved VPN credentials", 
-        "restart VPN client",
-        "Verify VPN account perissions"]
-        confidence = 0.85
+Title:
+{title}
 
-    elif "password" in details.lower():
-        category = "Account Access"
-        ai_summary = "Possible password or authentication issue."
-        recommended_steps = [
-            "Verify password reset was completed",
-            "Check account lock status",
-            "Attempt login again"
+Details:
+{details}
+
+Return:
+    
+Category:
+Priority:
+Summary:
+Recommended Steps:
+
+Keep the response concise and practical.
+"""
+    response = client.messages.create(
+        model = "claude-haiku-4-5-20251001",
+        max_tokens = 500,
+        messages = [
+            {
+                "role": "user",
+                "content": prompt
+            }
         ]
-        confidence = 0.90
-
-    else:
-        category = "General IT"
-        ai_summary = "General technical issue requiring investigation."
-        recommended_steps = [
-            "Gather additional details",
-            "Reproduce the issue",
-            "Check system logs"
-        ]
-        confidence = 0.60
+    )
+    
+    ai_response = response.content[0].text
 
     return {
-        "category": category,
-        "ai_summary": ai_summary,
-        "recommended_steps": recommended_steps,
-        "ai_confidence": confidence
+        "analysis": ai_response
     }
-    

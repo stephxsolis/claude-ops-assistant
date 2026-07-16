@@ -14,10 +14,16 @@ interface Ticket {
   assigned_to: string | null
 }
 
+interface Analysis {
+  analysis: string
+}
+
 function App() {
 
   const [ticketTitle, setTicketTitle] = useState ("") //ticketTitle is current value & setTicketTitle value updates
   const [ticketDetails, setTicketDetails] = useState ("")
+
+  const [analyses, setAnalyses] = useState<Record<number, Analysis>>({})
  
   const handleSubmit = async () => {
     //console.log("Title:", ticketTitle)
@@ -53,6 +59,7 @@ function App() {
 
     setTicketTitle("")
     setTicketDetails("")
+
   } catch (error) {
     console.error("Error submitting ticket:", error)
   }
@@ -125,23 +132,42 @@ function App() {
     }
   }
 
+  const analyzeTicket = async (id: number) => {
+    try {
+      const response = await fetch (`http://127.0.0.1:8000/tickets/${id}/analyze`,{
+        method: "POST"
+      }
+    ) 
+      const data = await response.json()
+      setAnalyses(prev =>({
+        ...prev,
+        [id]: data
+      }))
+
+
+    } catch(error){
+      console.error("Error analyzing the ticket:", error)
+
+    }
+  }
+
 
  
   return (
     <div>
       <h1>
-        AI Incident Dashboard
+        ClaudeOps 
       </h1> 
 
-      <label> Ticket Title </label>
+      <label> Request Title </label>
       <input id ="ticketTitle"
               type = "text"
               value = {ticketTitle}
-              placeholder='Ticket Title'
+              placeholder='Request Title'
               onChange = {(e) => setTicketTitle(e.target.value)} /* onChange means */
               />
 
-      <label> Ticket Details </label>
+      <label> Request Details </label>
       <textarea id = "ticketDetails"
                 value = {ticketDetails}
                 placeholder = 'Describe the issue'
@@ -176,7 +202,7 @@ function App() {
 
 
       <div>
-      <h2> Tickets </h2>
+      <h2> Requests </h2>
       </div>
       
 
@@ -223,6 +249,17 @@ function App() {
                   </select>
 
           <button onClick={() => deleteTicket(ticket.id)}> Delete </button>
+          <button onClick={() => analyzeTicket(ticket.id)}>
+            Analyze with Claude
+          </button>
+          {analyses[ticket.id]&& (
+            <div className = "analysis-card">
+              <h4> Claude Analysis </h4>
+              <pre>
+                {analyses[ticket.id].analysis}
+              </pre>
+              </div>
+          )}
           </div>
 
       ))}
@@ -233,15 +270,5 @@ function App() {
   )
 
 }
-
-
-
-//have a input text field
-//have a submit INC ticket
-//after ticket is submitted AI reads it and gives it a 
-
-//user POV 
-//user can see all past tickets
-//submit another ticket 
 
 export default App

@@ -1,113 +1,78 @@
-#AI Incident Dashboard
+# ClaudeOps
 
-An AI-powered IT incident management dashboard that automatically analyzes user-submitted tickets, categorizes issues, generates summaries, and provides recommendations for troubleshooting
+AI-powered operations assistant that helps organizations triage requests, generate documentation, and streamline repetitive workflows using Claude.
 
-The goal of this project is to explore how AI can improve IT support workflows by reducing manual ticket triage and helping technicians resolve incidents faster.
+---
 
-## Featurs
+## Overview
 
-### Ticket Management
-- Create IT incident tickets
-- View all submitted tickets
-- Update ticket status
-- Assign tickets to technicians
-- Delete tickets
+Small organizations often spend significant time responding to repetitive operational requests, documenting resolutions, and transferring knowledge between team members.
 
-### AI-Powered Analysis
-- Automatically categorizes incidents
-- Generates ticket summaries
-- Provides recommended troublshooting steps
-- Provides AI confidence scoring
+ClaudeOps is a full-stack web application that combines traditional incident management with AI-assisted workflows. Instead of only tracking requests, ClaudeOps helps users understand issues faster, generate actionable recommendations, and automatically create reusable documentation.
 
-### Database 
-- Persistent ticket storage using SQLite
-- SQLAlchemy ORM for database management
+This project demonstrates how large language models can augment—not replace—human decision making in everyday organizational operations.
+
+---
+
+## Features
+
+### Incident Management
+- Create, update, and delete incidents
+- Track status and severity
+- Store incidents in a relational database
+
+### AI Ticket Analysis
+- Categorize incidents
+- Summarize issues
+- Identify priority
+- Recommend troubleshooting steps
+
+### AI Documentation
+- Generate knowledge-base articles
+- Produce reusable runbooks
+- Create incident summaries
+
+### Analytics
+- Dashboard showing incidents
+- Status tracking
+- Severity distribution
+
+---
 
 ## Tech Stack
 
-### Frontend
+Frontend
 - React
-- Typescript
+- TypeScript
 - Vite
 
-### Backend
+Backend
 - FastAPI
 - Python
 - SQLAlchemy
-- Pydantic
-
-### Database
 - SQLite
 
-### AI
-- Modular AI analysis service
-- Current implementation uses rule-based classification
-- Claude API integration planned
+AI
+- Claude API
 
-## Architecture
-User
-|
-v
-React Dashboard
-|
-v
-FastAPI Backend
-|
-v
-+--> SQLite Database
-|
-v
-Incident Dashboard
+Tools
+- Git
+- GitHub
 
-## Example Workflow
+---
 
-1. User submits an IT issue:
-  > "I changed my password and now my VPN is not connecting."
+## Why I Built This
 
-2. Backend sends the ticket to the AI analysis service
+During my time working in IT support, I noticed that resolving technical issues often depended on institutional knowledge scattered across emails, tickets, and individual team members.
 
-3. AI gereates:
-  - Caregory: Network
-  - Summary: VPN connectivity issue detected
-  - Recommended steps:
-    - Clear saved VPN client
-    - Verify account permissions
+I built ClaudeOps to explore how AI can reduce repetitive work while preserving human oversight. Rather than replacing technical staff, the goal is to help organizations respond more consistently, document solutions automatically, and make operational knowledge easier to share.
 
-4. Ticket is stored in the database and displayed on the dashboard.
+---
 
 ## Future Improvements
 
-- Replace rule-based AI analysis with Claude API
-- Add authentication
-- Add technician/user roles
-- Add AI chatbot for troubleshooting
-- Add ticket history and analytics
-
-## Running locally
-
-### Backend
-
-Create virtual environment:
-
-```bash
-python -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run FastAPI
-uvicorn main:app --reload
-```
-### Frontend
-```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-```
-
-### Demo
-![alt text](images/dashboard.png)
-
+- Role-based authentication
+- Searchable knowledge base
+- Multi-organization support
+- AI-generated workflow automation
+- Reporting and analytics

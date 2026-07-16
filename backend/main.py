@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-from services.ai_service import analyze_ticket
+from services.ai_service import analyze_ticket as analyze_with_claude
 from database import engine, Base, SessionLocal
 from models.ticket import TicketDB
 
@@ -70,22 +70,22 @@ def create_ticket(ticket: TicketCreate):
 
     db = SessionLocal()
 
-    ai_result = analyze_ticket(
+    '''ai_result = analyze_ticket(
         ticket.title,
         ticket.details
-    )
+    )'''
 
     new_ticket = TicketDB(
         title=ticket.title,
         details=ticket.details,
         severity=ticket.severity,
-        category=ai_result["category"],
+        category="Not analyzed",
         status="Open",
         created_at=datetime.now().isoformat(),
         assigned_to=None,
-        ai_summary=ai_result["ai_summary"],
-        recommended_steps=ai_result["recommended_steps"],
-        ai_confidence=ai_result["ai_confidence"]
+        ai_summary=None,
+        recommended_steps=None,
+        ai_confidence=None
     )
 
     db.add(new_ticket)
@@ -181,4 +181,29 @@ def assign_to (ticket_id: int, assignment: AssignedTo):
 
     return {
         "message": "Ticket not found"
+    }
+
+@app.post("/tickets/{ticket_id}/analyze")
+def analyze_ticket_endpoint(ticket_id: int):
+
+    db = SessionLocal()
+
+    ticket = (
+        db.query(TicketDB)
+        .filter(TicketDB.id == ticket_id)
+        .first()
+    )
+    if not ticket:
+        db.close()
+        return {"message": "Ticket not found"}
+    
+    result = analyze_with_claude(
+        ticket.title,
+        ticket.details
+    )
+
+    db.close()
+
+    return {
+        "analysis": result["analysis"]
     }
