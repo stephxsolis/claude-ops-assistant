@@ -78,7 +78,7 @@ def create_ticket(ticket: TicketCreate):
     new_ticket = TicketDB(
         title=ticket.title,
         details=ticket.details,
-        severity=ticket.severity,
+        severity="Pending AI Analysis",
         category="Not analyzed",
         status="Open",
         created_at=datetime.now().isoformat(),
@@ -201,9 +201,14 @@ def analyze_ticket_endpoint(ticket_id: int):
         ticket.title,
         ticket.details
     )
+    ticket.ai_summary = result["analysis"]
+
+    db.commit()
+    db.refresh(ticket)
 
     db.close()
 
     return {
+        "message": "Analysis complete",
         "analysis": result["analysis"]
     }

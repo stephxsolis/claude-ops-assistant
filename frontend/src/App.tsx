@@ -1,5 +1,5 @@
 
-//import './App.css'
+import './App.css'
 //import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
@@ -43,8 +43,8 @@ function App() {
       },
       body: JSON.stringify({
         title: ticketTitle,
-        details: ticketDetails,
-        severity: severity
+        details: ticketDetails
+        //severity: severity
       })
     })
   
@@ -84,7 +84,7 @@ function App() {
   }, [])
 
 
-  const [severity, setSeverity] = useState("Low")
+  //const [severity, setSeverity] = useState("Low")
   //const [status, setStatus] = useState("Open")
   const updateTicketStatus = async (id: number, status: string) => {
     try{
@@ -131,8 +131,9 @@ function App() {
       console.error("Error assigning the ticket:", error)
     }
   }
-
+  const [loadingAnalysis, setLoadingAnalysis] = useState<number | null>(null)
   const analyzeTicket = async (id: number) => {
+    setLoadingAnalysis(id)
     try {
       const response = await fetch (`http://127.0.0.1:8000/tickets/${id}/analyze`,{
         method: "POST"
@@ -148,16 +149,18 @@ function App() {
     } catch(error){
       console.error("Error analyzing the ticket:", error)
 
+    } finally {
+      setLoadingAnalysis(null)
     }
   }
-
-
  
+
   return (
-    <div>
+    <div className = "container">
       <h1>
         ClaudeOps 
-      </h1> 
+      </h1>
+      <p className = "subtitle"> AI-Powered IT Incident Management Assistant </p>
 
       <label> Request Title </label>
       <input id ="ticketTitle"
@@ -174,7 +177,7 @@ function App() {
                 onChange = {(e) => setTicketDetails(e.target.value)}
       ></textarea>
 
-<label> Severity </label>
+{/*<label> Severity Reported </label>
 <select value = {severity}
               onChange = {(e) => setSeverity(e.target.value)}
       >
@@ -183,6 +186,8 @@ function App() {
         <option>High</option>
         <option>Critical</option>
       </select>
+*/}
+
 {/*
 <label> Status </label>
 <select value = {status}
@@ -195,7 +200,7 @@ function App() {
       </select>
       */}
 
-      <button id = "submitButton"
+      <button className = "submit-button"
               onClick={handleSubmit}> 
               Submit 
       </button>
@@ -212,18 +217,20 @@ function App() {
           <h3> {ticket.title}</h3>
           <p> {ticket.details}</p>
           <p> 
-            Severity: <strong>{ticket.severity}</strong> 
+            Severity: <strong className = {`severity ${ticket.severity.toLowerCase()}`}>
+              {ticket.severity}
+              </strong> 
           </p>
         
           <p> 
-            Status: <strong>{ticket.status} </strong>
+            Status: <strong className = {`severity ${ticket.status.toLowerCase().replace(" ","")}`}>{ticket.status} </strong>
 
           </p>
           <p>
-            Assigned To: <strong>{ticket.assigned_to}</strong>
+            Assigned To: <strong>{ticket.assigned_to ?? "Unassigned"}</strong>
           </p>
           <p>
-            Created At: <strong>{ticket.created_at}</strong>
+            Created At: <strong>{new Date(ticket.created_at).toLocaleString()}</strong>
           </p>
           <label>Update Status:</label>
           <select value = {ticket.status}
@@ -248,16 +255,20 @@ function App() {
                   <option value="Nelson">Nelson</option>
                   </select>
 
-          <button onClick={() => deleteTicket(ticket.id)}> Delete </button>
-          <button onClick={() => analyzeTicket(ticket.id)}>
-            Analyze with Claude
+          <button className = "delete-button" onClick={() => deleteTicket(ticket.id)} > Delete </button>
+          <button className = "analyze-button"onClick={() => analyzeTicket(ticket.id)}
+                  disabled={loadingAnalysis === ticket.id}
+                  >
+                    {loadingAnalysis === ticket.id
+                      ? "Analyzing..."
+                      : "Analyze with Claude"}
           </button>
           {analyses[ticket.id]&& (
             <div className = "analysis-card">
               <h4> Claude Analysis </h4>
-              <pre>
+              <div className = "claude-response">
                 {analyses[ticket.id].analysis}
-              </pre>
+              </div>
               </div>
           )}
           </div>
