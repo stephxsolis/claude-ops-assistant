@@ -1,8 +1,8 @@
 # ClaudeOps
 
-AI-powered operations assistant that helps organizations triage requests, generate documentation, and streamline repetitive workflows using Claude.
+ClaudeOps is a full-stack AI-powered IT incident management application built with React, FastAPI, SQLite, and Anthropic's Claude API.
 
----
+Users can create support tickets, manage incident status and assignments, and use Claude to automatically analyze incidents by identifying the issue, assigning a priority, and recommending troubleshooting steps.
 
 ## Overview
 
@@ -12,32 +12,28 @@ ClaudeOps is a full-stack web application that combines traditional incident man
 
 This project demonstrates how large language models can augment—not replace—human decision making in everyday organizational operations.
 
----
+
 
 ## Features
 
-### Incident Management
-- Create, update, and delete incidents
-- Track status and severity
-- Store incidents in a relational database
+### Ticket Management
+- Create IT support tickets
+- Update ticket status
+- Assign tickets to team members
+- Delete tickets
+- Store tickets in SQLite using SQLAlchemy
 
-### AI Ticket Analysis
-- Categorize incidents
-- Summarize issues
-- Identify priority
-- Recommend troubleshooting steps
+### AI Incident Analysis
+- Analyze tickets using Anthropic Claude
+- Identify incident category
+- Recommend priority level
+- Generate concise incident summaries
+- Suggest troubleshooting steps
 
-### AI Documentation
-- Generate knowledge-base articles
-- Produce reusable runbooks
-- Create incident summaries
-
-### Analytics
-- Dashboard showing incidents
-- Status tracking
-- Severity distribution
-
----
+### User Interface
+- Responsive React frontend
+- Dark-themed dashboard
+- Loading state during AI analysis
 
 ## Tech Stack
 
@@ -59,7 +55,8 @@ Tools
 - Git
 - GitHub
 
----
+## Demo
+![alt text](<images/Screenshot 2026-07-16 at 9.24.51 PM.png>)
 
 ## Why I Built This
 
@@ -67,7 +64,6 @@ During my time working in IT support, I noticed that resolving technical issues 
 
 I built ClaudeOps to explore how AI can reduce repetitive work while preserving human oversight. Rather than replacing technical staff, the goal is to help organizations respond more consistently, document solutions automatically, and make operational knowledge easier to share.
 
----
 
 ## Future Improvements
 
