@@ -20,6 +20,8 @@ Rather than replacing IT professionals, ClaudeOps demonstrates how large languag
 - Tech Stack
 - Demo
 - Installation
+  - Local Setup
+  - Docker Setup
 - Environment Variables
 - Project Structure
 - Why I Built This
@@ -70,17 +72,20 @@ This project explores how AI can improve operational workflows by helping suppor
 - Loading states during AI analysis
 
 
-
 ## Architecture
 
 ```text
-                React + TypeScript
+                 Docker Compose
+                        │
+        ┌───────────────┴───────────────┐
+        │                               │
+        ▼                               ▼
+ React + TypeScript              FastAPI Backend
+      (Vite)                           │
+        │                              │
+        └────────── REST API ──────────┘
                        │
-                 REST API Requests
-                       │
-                 FastAPI Backend
-                       │
-          SQLAlchemy + SQLite Database
+             SQLAlchemy + SQLite
                        │
               Anthropic Claude API
 ```
@@ -111,6 +116,8 @@ This project explores how AI can improve operational workflows by helping suppor
 
 - Git
 - GitHub
+- Docker
+- Docker Compose
 
 
 
@@ -135,7 +142,7 @@ Coming Soon
 
 ## Installation
 
-### Clone the repository
+### Local Setup
 
 ```bash
 git clone https://github.com/stephxsolis/claude-ops-assistant.git
@@ -185,7 +192,42 @@ The frontend will start at:
 http://localhost:5173
 ```
 
+### Docker Setup
 
+ClaudeOps can also be run using Docker Compose.
+
+#### Prerequisites
+
+- Docker Desktop
+
+#### Start the application
+
+```bash
+docker compose up --build
+```
+
+The application will be available at:
+
+Frontend:
+```
+http://localhost:5173
+```
+
+Backend API:
+```
+http://localhost:8000
+```
+
+FastAPI Documentation:
+```
+http://localhost:8000/docs
+```
+
+To stop the application:
+
+```bash
+docker compose down
+```
 
 ## Environment Variables
 
